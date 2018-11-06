@@ -5,6 +5,7 @@
 
 using namespace std;
 using ui = unsigned int;
+using ll = long long int;
 
 int n, m;
 vector<ui> input;
@@ -29,6 +30,7 @@ bool checkRange(int a, int b, bool &isBig) {
 }
 
 inline void moveForward(vector<int> &x, const int &nPos) {
+
 	for (int i = 0; i < n; i++)
 	{
 		x[i] += bsInput[nPos][i];
@@ -105,6 +107,40 @@ long long int Solve1() {
 	} while (start != m);
 
 	return wyn;
+}
+
+ll Solve2() {
+	int poczatek = 0;
+	int srodek = 0;
+	int koniec = 0;
+	vector<int> poczSrod; // przedzial od [poczatku do srodka] wlancznie
+	vector<int> konPocz; // przedzial od [konca+1 do poczatku-1]
+	ll wynik = 0;
+
+	for (; poczatek < m; poczatek++)
+	{
+
+		while (!sprawdzPrzedzial(poczSrod))
+		{
+			srodek++;
+			moveForward(poczSrod, srodek);
+		}
+		while (srodek <= koniec)
+		{
+			moveBack(konPocz, koniec);
+			koniec++;
+		}
+		while (sprawdzPrzedzial(konPocz))
+		{
+			moveBack(konPocz, koniec);
+			koniec++;
+		}
+		wynik += koniec - srodek + 1;
+		moveBack(poczSrod, poczatek);
+		moveForward(konPocz, poczatek);
+	}
+
+
 }
 
 void liczPref() {
